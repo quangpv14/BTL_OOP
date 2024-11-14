@@ -214,8 +214,77 @@ public class Game {
     }
 
     public void monsterAction() {
-        
+        for (int i = 0; i < map.getCurrentMap().arrayMonster.size(); i++) {
+            Monster temp = map.getCurrentMap().arrayMonster.get(i);
+            if (temp.die()) {
+                player.addEXP(temp.getExp());
+                map.getCurrentMap().arrayMonster.remove(temp);
+            }
+            {
+                Rectangle shapeMonter = new Rectangle((int) temp.getX(), (int) temp.getY(), temp.getWidth(), temp.getHeight());
+                if (shapeMonter.contains(new Point((int) player.getX(), (int) player.getY()))
+                        || shapeMonter.contains(new Point((int) player.getX() + player.getWidth() - 20, (int) player.getY()))
+                        || shapeMonter.contains(new Point((int) player.getX(), (int) player.getY() + player.getHeight() - 20))
+                        || shapeMonter.contains(new Point((int) player.getX() + player.getWidth() - 20, (int) player.getY() + player.getHeight() - 20))) {
+
+                    double nx = player.getX();
+                    double ny = player.getY();
+                    if (player.immortal() == false) {
+                        switch (player.getDirection()) {
+                            case LEFT:
+                                nx += 15 * player.getSpeed_base();
+                                break;
+                            case RIGHT:
+                                nx -= 15 * player.getSpeed_base();
+                                break;
+                            case UP:
+                                ny += 15 * player.getSpeedY();
+                                break;
+                            case DOWN:
+                                ny -= 15 * player.getSpeedY();
+                                break;
+                            default:
+                                break;
+                        }
+                        if (valid_location(nx, ny) == submap.CLEAR) {
+                            player.move(nx, ny);
+                        }
+                        player.decreaseHP(temp.getAttack_base());
+
+                    } else {
+
+                    }
+                }
+
+                if (Math.sqrt(Math.pow(temp.getX() - player.getX(), 2) + Math.pow(temp.getY() - player.getY(), 2)) < temp.AREA_DETEC) {
+                    double dx = temp.getX();
+                    double dy = temp.getY();
+                    if (Math.abs(temp.getX() - player.getX()) > Math.abs(temp.getY() - player.getY())) {
+                        if (temp.getX() >= player.getX()) {
+                            temp.setDirection(Entity.Direction.LEFT);
+                            dx -= temp.getSpeed_base();
+                        } else {
+                            temp.setDirection(Entity.Direction.RIGHT);
+                            dx += temp.getSpeed_base();
+                        }
+                    } else if (temp.getY() < player.getY()) {
+                        temp.setDirection(Entity.Direction.DOWN);
+                        dy += temp.getSpeedY();
+                    } else if (temp.getY() >= player.getY()) {
+                        temp.setDirection(Entity.Direction.UP);
+                        dy -= temp.getSpeedY();
+                    }
+                    if (map.getCurrentMap().valid_location(dx, dy) != 0) {
+                        temp.move(dx, dy);
+                    }
+                } else {
+                    map.getCurrentMap().monster_move_onMap(temp);
+                }
+            }
+        }
     }
+
+
 
     public void playerAction(long gameTime) {
         if (player.die()) {
@@ -280,10 +349,51 @@ public class Game {
 
     }
     
-    public void player_att_monster()
+    public void player_att_monster() // khi don tan cong cua player cham vao monster
     {
-        
+        double monster_x = 0;
+        double monster_y = 0;
+        double monster_width = 0;
+        double monster_height = 0;
+        for (int i = 0; i < map.getCurrentMap().arrayMonster.size(); i++) {
+            monster_x = map.getCurrentMap().arrayMonster.get(i).getX();
+            monster_y = map.getCurrentMap().arrayMonster.get(i).getY();
+            monster_width = map.getCurrentMap().arrayMonster.get(i).getWidth();
+            monster_height = map.getCurrentMap().arrayMonster.get(i).getHeight();
+            if (player.get_att() == true
+                    && (new Rectangle((int) monster_x, (int) monster_y, (int) monster_width, (int) monster_height).contains(player.get_att_point1())
+                    || new Rectangle((int) monster_x, (int) monster_y, (int) monster_width, (int) monster_height).contains(player.get_att_point2())
+                    || new Rectangle((int) monster_x, (int) monster_y, (int) monster_width, (int) monster_height).contains(player.get_att_point3()))) {
+                map.getCurrentMap().arrayMonster.get(i).decreaseHP(player.getATK()); // chua co max att nen dung tam att base
+
+                if (player.getX() < map.getCurrentMap().arrayMonster.get(i).getX()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.LEFT);
+                } else if (player.getX() > map.getCurrentMap().arrayMonster.get(i).getX()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.RIGHT);
+                } else if (player.getY() < map.getCurrentMap().arrayMonster.get(i).getY()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.UP);
+                } else if (player.getY() > map.getCurrentMap().arrayMonster.get(i).getY()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.DOWN);
+                }
+            }
+            if (player.get_fireball_att() == true
+                    && (new Rectangle((int) monster_x, (int) monster_y, (int) monster_width, (int) monster_height).contains(player.get_fireball_att_point()))) {
+                map.getCurrentMap().arrayMonster.get(i).decreaseHP(player.get_ATK_FIREBALL()); // chua co max att nen dung tam att base
+
+                if (player.getX() < map.getCurrentMap().arrayMonster.get(i).getX()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.LEFT);
+                } else if (player.getX() > map.getCurrentMap().arrayMonster.get(i).getX()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.RIGHT);
+                } else if (player.getY() < map.getCurrentMap().arrayMonster.get(i).getY()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.UP);
+                } else if (player.getY() > map.getCurrentMap().arrayMonster.get(i).getY()) {
+                    map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.DOWN);
+                }
+            }
+        }
     }
+
+
 
     public int xPlayer() {
         return (int) player.getX();
