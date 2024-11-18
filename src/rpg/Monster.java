@@ -75,21 +75,21 @@ class Monster extends Entity {
     }
 
     public void setProperties(double x, double y, int exp, int ATK, int DEF, int HP, double speed, double xLeft, double yTop, double xRight, double yBottom, Entity.Direction dir) {
-//        this.setX(x);
-//        this.setY(y);
-//        this.speed_base = speed;
-//        this.attack_base = ATK;
-//        this.DEF_base = DEF;
-//        this.HP_base = HP;
-//        this.x_left = xLeft;
-//        this.y_top = yTop;
-//        this.x_right = xRight;
-//        this.y_bottom = yBottom;
-//        this.direction = dir;
-//        this.setExp(exp);
-//        this.HP = HP_base;
-//        this.randomX = x;
-//        this.randomY = y;
+    	this.setX(x);
+    	this.setY(y);
+    	this.speed_base = speed;
+    	this.attack_base = ATK;
+    	this.DEF_base = DEF;
+    	this.HP_base = HP;
+    	this.x_left = xLeft;
+    	this.y_top = yTop;
+    	this.x_right = xRight;
+    	this.y_bottom = yBottom;
+    	this.direction = dir;
+    	this.setExp(exp);
+    	this.HP = HP_base;
+    	this.randomX = x;
+    	this.randomY = y;
     }
 
     public int getWidth() {
@@ -106,6 +106,24 @@ class Monster extends Entity {
     
     public void decreaseHP(int player_att) {
         if (countdownImmortal == 0) {
+        	this.HP = HP - (player_att - DEF_base);
+        	System.out.println("HP = " + HP);
+        	
+        	if(direction == Entity.Direction.LEFT) {
+        		this.x += 15*speed_base;
+        	}
+        	if(direction == Entity.Direction.RIGHT) {
+        		this.x -= 15*speed_base;
+        	}
+        	if(direction == Entity.Direction.UP) {
+        		this.y -= 15*speed_base;
+        	}
+        	if(direction == Entity.Direction.DOWN) {
+        		this.y += 15*speed_base;
+        	}
+        	
+        	countAtRest = 10;
+        	countdownImmortal = 30;
         }
 
     }
@@ -119,7 +137,25 @@ class Monster extends Entity {
     }
 
     public void move(double nx, double ny) {
-        
+    	switch (direction) {
+        case LEFT:
+        	//Nếu hướng là LEFT, gán hình ảnh từ hàng thứ 1.
+        	image = monsterSprites[1][i_image];
+        	break;
+        case RIGHT:
+        	//Nếu hướng là RIGHT, gán hình ảnh từ hàng thứ 2.
+        	image = monsterSprites[2][i_image];
+        	break;
+        case UP:
+        	//Nếu hướng là UP, gán hình ảnh từ hàng thứ 3.
+        	image = monsterSprites[3][i_image];
+        	break;
+        case DOWN:
+        	//Nếu hướng là LEFT, gán hình ảnh từ hàng thứ 0.
+        	image = monsterSprites[0][i_image];
+        	break;
+        }
+    	
         if (countdownImmortal > 0) {
             countdownImmortal--;
         }
@@ -144,8 +180,42 @@ class Monster extends Entity {
     public void move_auto() {
         randomX = x;
         randomY = y;
-       
-
+        
+        switch(direction) {
+        case LEFT:
+        	image = monsterSprites[1][i_image];
+        	if(x > x_left) {
+        		randomX = (x - speed_base);
+        	} else {
+        		this.direction = Entity.Direction.RIGHT;
+        	}
+        	break;
+        case RIGHT:
+        	image = monsterSprites[2][i_image];
+        	if(x < x_right) {
+        		randomX = (x + speed_base);
+        	} else {
+        		this.direction = Entity.Direction.LEFT;
+        	}
+        	break;
+        case UP:
+        	image = monsterSprites[3][i_image];
+        	if(y > y_top) {
+        		randomY = (y - speed_base*3/4);
+        	} else {
+        		this.direction = Entity.Direction.DOWN;
+        	}
+        	break;
+        case DOWN:
+        	image = monsterSprites[0][i_image];
+        	if(y < y_bottom) {
+        		randomX = (y + speed_base*3/4);
+        	} else {
+        		this.direction = Entity.Direction.UP;
+        	}
+        	break;
+        }
+        
         if (countTime * speed_base % (100) == 0) {
             randomDirec();
         }
@@ -154,7 +224,18 @@ class Monster extends Entity {
     public void randomDirec() {
         random_direction = random.nextInt(4);
         switch (random_direction) {
-
+        case 0:
+        	this.direction = Entity.Direction.LEFT;
+        	break;
+        case 1:
+        	this.direction = Entity.Direction.RIGHT;
+        	break;
+        case 2:
+        	this.direction = Entity.Direction.UP;
+        	break;
+        case 3:
+        	this.direction = Entity.Direction.DOWN;
+        	break;
         }
     }
 
