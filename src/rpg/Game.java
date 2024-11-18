@@ -167,15 +167,23 @@ public class Game {
 
         if (Canvas.keyboardKeyState(KeyEvent.VK_LEFT)) {
             dx = -player.speed_base;
+            player.setDirection(Entity.Direction.LEFT);
+            player.draw_direction();
         }
         if (Canvas.keyboardKeyState(KeyEvent.VK_RIGHT)) {
             dx = player.speed_base;
+            player.setDirection(Entity.Direction.RIGHT);
+            player.draw_direction();
         }
         if (Canvas.keyboardKeyState(KeyEvent.VK_UP)) {
             dy = -player.speed_base * 4 / 3;
+            player.setDirection(Entity.Direction.UP);
+            player.draw_direction();
         }
         if (Canvas.keyboardKeyState(KeyEvent.VK_DOWN)) {
             dy = player.speed_base * 4 / 3;
+            player.setDirection(Entity.Direction.DOWN);
+            player.draw_direction();
         }
         nx += dx;
         ny += dy;
