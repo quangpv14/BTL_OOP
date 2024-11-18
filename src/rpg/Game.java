@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.awt.Rectangle;
 
-
+//ahahahaasqw
 public class Game {
 
     private Map map;
