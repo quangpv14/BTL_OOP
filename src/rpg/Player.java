@@ -303,17 +303,27 @@ class Player extends Entity {
         }
     }
 
-    public void setSwordAni(){
-        if (att == true) {
+    public void setSwordAni() {
+        if (att == true) { // Check if the player is attacking
             countSword++;
-            if(countSword % 5 == 0){
-                index_att++;
+            
+            // Update sword animation index based on countSword
+            if (countSword == 5) {
+                index_att = 1;
+            } else if (countSword == 10) {
+                index_att = 2;
             }
-        } 
-        else{
-        // Reset sword animation when not attacking
-        countSword = 0;
-        index_att = 0;	
+    
+            // Reset to initial state if countSword exceeds the animation limit
+            if (countSword > 10) {
+                countSword = 0;
+                index_att = 0;
+                att = false; // Reset attack state
+            }
+        } else {
+            // Reset sword animation when not attacking
+            countSword = 0;
+            index_att = 0;
         }
     }
  
