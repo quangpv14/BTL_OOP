@@ -303,11 +303,20 @@ class Player extends Entity {
         }
     }
 
-    public void setSwordAni() {
+    public void setSwordAni(){
         if (att == true) {
-        } else {
+            countSword++;
+            if(countSword % 5 == 0){
+                index_att++;
+            }
+        } 
+        else{
+        // Reset sword animation when not attacking
+        countSword = 0;
+        index_att = 0;	
         }
     }
+ 
 
     public void setFireballAni() {
         if (fireball_att == true) {
