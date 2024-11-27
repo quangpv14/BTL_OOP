@@ -319,9 +319,74 @@ class Player extends Entity {
  
 
     public void setFireballAni() {
-        if (fireball_att == true) {
+        if (fireball_att == true) { // Check if the player is using fireball attack
+            switch (countFireball) {
+                case 0:
+                    dir_fire = this.direction;// Set initial direction
+                case 5:
+                    index_fireball = 1;
+                    break;
+                case 10:
+                    index_fireball = 2;
+                    break;
+                case 15:
+                    index_fireball = 3;
+                    break;
+                case 20:
+                    index_fireball = 4;
+                    break;
+                case 25:
+                    index_fireball = 5;
+                    break;
+                case 30:
+                    index_fireball = 6;
+                    break;
+                case 35:
+                    index_fireball = 7;
+                    break;
+                default:
+                    break;
+            }
+                // Update fireball image and position based on direction
+            switch (dir_fire) {
+                case UP:
+                    current_fireball = (BufferedImage) fire_ball[1][index_fireball];
+                    att_fireball_y -= 5;
+                    range_fireball.setLocation(att_fireball_x + 32, att_fireball_y);
+                    break;
+                case DOWN:
+                    current_fireball = (BufferedImage) fire_ball[3][index_fireball];
+                    att_fireball_y += 5;
+                    range_fireball.setLocation(att_fireball_x + 32, att_fireball_y);
+                    break;
+                case LEFT:
+                    current_fireball = (BufferedImage) fire_ball[0][index_fireball];
+                    att_fireball_x -= 5;
+                    range_fireball.setLocation(att_fireball_x, att_fireball_y + 32);
+                    break;
+                case RIGHT:
+                    current_fireball = (BufferedImage) fire_ball[2][index_fireball];
+                    att_fireball_x += 5;
+                    range_fireball.setLocation(att_fireball_x, att_fireball_y + 32);
+                    break;
+            }
+
+            countFireball++; // Increment to continue animation
             
-        } else {
+            // Reset fireball animation if it exceeds the limit
+            if (countFireball > 35) {
+                countFireball = 0;
+                index_fireball = 0;
+                fireball_att = false; // Reset fireball attack state
+            }
+
+        }
+        else {
+            // Reset fireball animation when not attacking
+            countFireball  = 0;
+            index_fireball = 0;
+            att_fireball_x = 0;
+            att_fireball_y = 0;
         }
     }
 
