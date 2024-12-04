@@ -106,7 +106,7 @@ class Monster extends Entity {
     
     public void decreaseHP(int player_att) {
         if (countdownImmortal == 0) {
-        	this.HP = HP - (player_att - DEF_base);
+        	this.HP -= (player_att - DEF_base);
         	System.out.println("HP = " + HP);
         	
         	if(direction == Entity.Direction.LEFT) {

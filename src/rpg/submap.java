@@ -136,8 +136,29 @@ public class submap {
             temp = scan.next();
             this.numberOfMonster = Integer.parseInt(temp);
             for (int i=0;i<this.numberOfMonster;i++){
-                
+                tempMonster = new Monster(new File(scan.next()));
+                x = Integer.parseInt(scan.next());
+                y = Integer.parseInt(scan.next());
+                exp = Integer.parseInt(scan.next());
+                ATK = Integer.parseInt(scan.next());
+                DEF = Integer.parseInt(scan.next());
+                HP = Integer.parseInt(scan.next());
+                speed = Double.parseDouble(scan.next());
+                xLeft = Integer.parseInt(scan.next());
+                yTop = Integer.parseInt(scan.next());
+                xRight = Integer.parseInt(scan.next());
+                yBottom = Integer.parseInt(scan.next());
+                switch(Integer.parseInt(scan.next())){
+                    case 1: dir = Entity.Direction.LEFT; break;
+                    case 2: dir = Entity.Direction.UP; break;
+                    case 3: dir = Entity.Direction.RIGHT; break;
+                    case 4: dir = Entity.Direction.DOWN; break;
+                    default: dir = Entity.Direction.DOWN; break;
+                }
+                tempMonster.setProperties(x*Map.TILE_WIDTH, y*Map.TILE_HEIGHT, exp, ATK, DEF, HP, speed, xLeft*Map.TILE_WIDTH, yTop*Map.TILE_HEIGHT, xRight*Map.TILE_WIDTH, yBottom*Map.TILE_HEIGHT, dir);
+                arrayMonster.add(tempMonster);
             }
+
         
         } catch (IOException ex) {
 

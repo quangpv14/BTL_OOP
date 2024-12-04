@@ -67,7 +67,9 @@ public class Framework extends Canvas {
     private long lastTime;
     
     private BufferedImage bg_introduce;
-    
+    int character0Width, character1Width,character2Width,character3Width;
+    int targetHeight = 200;
+    int targetWidth = 200;
     private BufferedImage bg_game;
     private BufferedImage bg_menu;
     private BufferedImage btn_start;
@@ -159,6 +161,13 @@ public class Framework extends Canvas {
             URL erenUrl3 = this.getClass().getResource("/rpg/resources/images/character3.png");
             character3 = ImageIO.read(erenUrl3);
             
+            
+
+         // Tính toán tỷ lệ khung hình và chiều rộng mới cho mỗi ảnh
+          character0Width = (int) ((double) character0.getWidth(null) / character0.getHeight(null) * targetHeight);
+          character1Width = (int) ((double) character1.getWidth(null) / character1.getHeight(null) * targetHeight);
+          character2Width = (int) ((double) character2.getWidth(null) / character2.getHeight(null) * targetHeight);
+          character3Width = (int) ((double) character3.getWidth(null) / character3.getHeight(null) * targetHeight);
             
         }
         catch (IOException ex) {
@@ -273,11 +282,15 @@ public class Framework extends Canvas {
             break;
             case GAMEOVER:
                 game.Draw(g2d, mousePosition());
-                g2d.setFont(new Font("Arial", Font.BOLD, 24));
+                g2d.setFont(new Font("Arial", Font.BOLD, 50));
             	g2d.drawString("YOU LOSE", game.xPlayer() -100 , game.yPlayer() -50);
+            	g2d.drawString("Bam ESC quay lai menu", game.xPlayer() -180, game.yPlayer() + 100);
             break;
             case DESTROYED:
             	game.Draw(g2d, mousePosition());
+            	g2d.setFont(new  Font("Arial", Font.BOLD, 50));
+                g2d.drawString("YOU WIN", game.xPlayer() -100 , game.yPlayer() -50);
+                g2d.drawString("Bam ESC quay lai menu", game.xPlayer() -180, game.yPlayer() +100);
             break;
             case PAUSE:
                 game.Draw(g2d, mousePosition());
@@ -291,17 +304,17 @@ public class Framework extends Canvas {
             break;
             case MAIN_MENU:
                 g2d.drawImage(bg_menu, 0, 0,frameWidth,frameHeight,null);
-                g2d.drawImage(btn_start, frameWidth/8, frameHeight/3 + 260, null);
-                g2d.drawImage(btn_loadgame, frameWidth/8, frameHeight/3 + 355, null);
-                g2d.drawImage(btn_options, frameWidth*3/4, frameHeight/3 + 260, null);
-                g2d.drawImage(btn_exit, frameWidth*3/4, frameHeight/3 + 355, null);               
+                g2d.drawImage(btn_start, frameWidth/8, frameHeight/3 + 260, 170, 50, null);
+                g2d.drawImage(btn_loadgame, frameWidth/8, frameHeight/3 + 355,170, 50, null);
+                g2d.drawImage(btn_options, frameWidth*3/4, frameHeight/3 + 260,170, 50, null);
+                g2d.drawImage(btn_exit, frameWidth*3/4, frameHeight/3 + 355,170, 50, null);               
             break;
             case OPTIONS:
             	g2d.drawImage(bg_menu, 0, 0,frameWidth,frameHeight,null);
-                g2d.drawImage(character0, frameWidth / 12, 400, null);
-                g2d.drawImage(character1, frameWidth / 12 + 220, 400, null);
-                g2d.drawImage(character2, frameWidth / 12 + 440 ,400, null);
-                g2d.drawImage(character3, frameWidth / 12 + 660, 400, null);
+            	g2d.drawImage(character0, frameWidth / 12, 400, targetWidth, targetHeight, null);
+            	g2d.drawImage(character1, frameWidth / 12 + targetWidth + 20, 400, targetWidth, targetHeight, null);
+            	g2d.drawImage(character2, frameWidth / 12 + (targetWidth + 20) * 2, 400, targetWidth, targetHeight, null);
+            	g2d.drawImage(character3, frameWidth / 12 + (targetWidth + 20) * 3, 400, targetWidth, targetHeight, null);
             break;
             
             case STARTING:
@@ -371,26 +384,27 @@ public class Framework extends Canvas {
     
     private void OptionMenu(){
         if(Canvas.mouseButtonState(MouseEvent.BUTTON1)){
-            
-            if(new Rectangle(frameWidth / 12, 400, character0.getWidth(), character0.getHeight()).contains(mousePosition())) {
-                index_character = 0;
-                gameState = GameState.MAIN_MENU;
-            }
-            
-            if(new Rectangle(frameWidth / 12 + 220, 400, character1.getWidth(), character1.getHeight()).contains(mousePosition())) {
-                index_character = 1;
-                gameState = GameState.MAIN_MENU;
-            }
-            
-            if(new Rectangle(frameWidth / 12 + 440, 400, character2.getWidth(), character2.getHeight()).contains(mousePosition())) {
-                index_character = 2;
-                gameState = GameState.MAIN_MENU;
-            }
-            
-            if(new Rectangle(frameWidth / 12 + 660, 400, character3.getWidth(), character3.getHeight()).contains(mousePosition())) {
-                index_character = 3;
-                gameState = GameState.MAIN_MENU;
-            }
+        	
+	            if(new Rectangle(frameWidth / 6, 400, character0.getWidth(), character0.getHeight()).contains(mousePosition())) {
+	                index_character = 0;
+	                gameState = GameState.MAIN_MENU;
+	            }
+	            
+	            if(new Rectangle(frameWidth / 6 + 220, 400, character1.getWidth(), character1.getHeight()).contains(mousePosition())) {
+	                index_character = 1;
+	                gameState = GameState.MAIN_MENU;
+	            }
+	            
+	            if(new Rectangle(frameWidth / 6 + 440, 400, character2.getWidth(), character2.getHeight()).contains(mousePosition())) {
+	                index_character = 2;
+	                gameState = GameState.MAIN_MENU;
+	            }
+	            
+	            if(new Rectangle(frameWidth / 6 + 660, 400, character3.getWidth(), character3.getHeight()).contains(mousePosition())) {
+	                index_character = 3;
+	                gameState = GameState.MAIN_MENU;
+	            }
+        	
         }
     }
     
