@@ -15,7 +15,7 @@ public class Game  {
     private long time_start_sword;
     private long time_start_fireball;
     private long time_start_transform;
-    private final int COOLDOWN_ATTACK = 30;
+    private final int COOLDOWN_ATTACK = 60;
     private int cooldown;
     private int fireball_cooldown;
     private boolean isEnd = false;
@@ -267,8 +267,6 @@ public class Game  {
                         temp.move(dx, dy);
                     }
                     else {
-                        temp.randomDirec(temp.getDirection());
-                        temp.move(dx, dy);
                     }
                 } 
                 

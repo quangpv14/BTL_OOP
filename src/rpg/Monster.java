@@ -241,63 +241,6 @@ class Monster extends Entity {
         }
     }
 
-    public void randomDirec(Direction exception) {
-        random_direction = random.nextInt(3);
-        switch (exception) {
-        case UP: 
-            switch (random_direction) {
-            case 0:
-            	this.direction = Entity.Direction.LEFT;
-            	break;
-            case 1:
-            	this.direction = Entity.Direction.RIGHT;
-            	break;
-            case 2:
-            	this.direction = Entity.Direction.DOWN;
-            	break;
-            }
-            
-        case DOWN: 
-            switch (random_direction) {
-            case 0:
-            	this.direction = Entity.Direction.LEFT;
-            	break;
-            case 1:
-            	this.direction = Entity.Direction.RIGHT;
-            	break;
-            case 2:
-            	this.direction = Entity.Direction.UP;
-            	break;
-            }
-            
-        case LEFT: 
-            switch (random_direction) {
-            case 0:
-            	this.direction = Entity.Direction.RIGHT;
-            	break;
-            case 1:
-            	this.direction = Entity.Direction.UP;
-            	break;
-            case 2:
-            	this.direction = Entity.Direction.DOWN;
-            	break;
-            }
-            
-        case RIGHT: 
-            switch (random_direction) {
-            case 0:
-            	this.direction = Entity.Direction.LEFT;
-            	break;
-            case 1:
-            	this.direction = Entity.Direction.UP;
-            	break;
-            case 2:
-            	this.direction = Entity.Direction.DOWN;
-            	break;
-            }
-        }
-    }
-
     public double getRanX() {
         return this.randomX;
     }
