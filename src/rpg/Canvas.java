@@ -22,7 +22,9 @@ public abstract class Canvas extends JPanel implements KeyListener, MouseListene
     // Mouse states - Here are stored states for mouse keys - is it down or not.
     private static boolean[] mouseState = new boolean[3];
         
-
+    private static long mousePressedTime;
+    private static boolean clickDetected;
+    
     public Canvas()
     {
         // We use double buffer to draw on the screen.
@@ -104,6 +106,16 @@ public abstract class Canvas extends JPanel implements KeyListener, MouseListene
         return mouseState[button - 1];
     }
     
+    public boolean isMouseClicked() {
+        long currentTime = System.currentTimeMillis();
+        //Chỉ trả về true khi nằm trong thời gian cho phép (40ms) và có nhấn chuột từ trước đó
+        if (clickDetected && (currentTime - mousePressedTime <= 40)) {
+            clickDetected = false; 
+            return true;
+        }
+        return false;
+    }
+    
     // Sets mouse key status.
     private void mouseKeyStatus(MouseEvent e, boolean status)
     {
@@ -118,18 +130,26 @@ public abstract class Canvas extends JPanel implements KeyListener, MouseListene
     // Methods of the mouse listener.
     @Override
     public void mousePressed(MouseEvent e)
-    {
+    {	//Chỉ cập nhật các trạng thái khi trước đó chưa có nhấn chuột
+    	if (!mouseState[e.getButton()]) { 
+            mousePressedTime = System.currentTimeMillis();
+            clickDetected = true; 
+        }
         mouseKeyStatus(e, true);
+        System.out.println("Mouse pressed");
     }
     
     @Override
     public void mouseReleased(MouseEvent e)
-    {
+    {	
         mouseKeyStatus(e, false);
+        System.out.println("Mouse released");
     }
     
     @Override
-    public void mouseClicked(MouseEvent e) { }
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Mouse clicked");
+    }
     
     @Override
     public void mouseEntered(MouseEvent e) { }
