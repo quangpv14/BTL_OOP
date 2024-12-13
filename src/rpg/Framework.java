@@ -52,7 +52,7 @@ public class Framework extends Canvas {
     
     /*Cac trang thai co the cua game
      */
-    public static enum GameState{STARTING, VISUALIZING, GAME_CONTENT_LOADING ,MAIN_MENU,LOADGAME, OPTIONS,PAUSE, PLAYING, GAMEOVER, DESTROYED}
+    public static enum GameState{STARTING, VISUALIZING, GAME_CONTENT_LOADING ,MAIN_MENU,INSTRUCTION, OPTIONS,PAUSE, PLAYING, GAMEOVER, DESTROYED}
     /**
      * Trang thai hien tai cua game
      */
@@ -73,14 +73,18 @@ public class Framework extends Canvas {
     private BufferedImage bg_game;
     private BufferedImage bg_menu;
     private BufferedImage btn_start;
-    private BufferedImage btn_loadgame;
+    private BufferedImage btn_instruction;
     private BufferedImage btn_options;
     private BufferedImage btn_exit;
+    private BufferedImage instructImg;
     private BufferedImage task,pause;
     private BufferedImage character0, character1, character2, character3;
+    private BufferedImage gameOver;
+    private BufferedImage optionMenu;
+    private BufferedImage loading;
+    
     // The actual game
     private Game game;
-    private File f;
     
     public Framework ()
     {
@@ -134,8 +138,11 @@ public class Framework extends Canvas {
             URL startImgUrl = this.getClass().getResource("/rpg/resources/images/menu/btn_start.png");
             btn_start = ImageIO.read(startImgUrl);
             
-            URL loadgameImgUrl = this.getClass().getResource("/rpg/resources/images/menu/btn_loadgame.png");
-            btn_loadgame = ImageIO.read(loadgameImgUrl);
+            URL insbImgUrl = this.getClass().getResource("/rpg/resources/images/menu/btn_instruction.png");
+            btn_instruction = ImageIO.read(insbImgUrl);
+            
+            URL instructUrl = this.getClass().getResource("/rpg/resources/images/instruction.png");
+            instructImg = ImageIO.read(instructUrl);            
             
             URL optionsImgUrl = this.getClass().getResource("/rpg/resources/images/menu/btn_options.png");
             btn_options = ImageIO.read(optionsImgUrl);
@@ -161,6 +168,14 @@ public class Framework extends Canvas {
             URL erenUrl3 = this.getClass().getResource("/rpg/resources/images/character3.png");
             character3 = ImageIO.read(erenUrl3);
             
+            URL gameOverUrl = this.getClass().getResource("/rpg/resources/images/gameover.png");
+            gameOver = ImageIO.read(gameOverUrl);
+            
+            URL optionMenuUrl = this.getClass().getResource("/rpg/resources/images/optionMenu.png");
+            optionMenu = ImageIO.read(optionMenuUrl);
+            
+            URL loadingUrl = this.getClass().getResource("/rpg/resources/images/loading.png");
+            loading = ImageIO.read(loadingUrl);
             
 
          // Tính toán tỷ lệ khung hình và chiều rộng mới cho mỗi ảnh
@@ -211,8 +226,8 @@ public class Framework extends Canvas {
                 case MAIN_MENU:
                     gameMenu();
                 break;
-                case LOADGAME:
-                    loadGame();
+                case INSTRUCTION:
+                    instruction();
                 break;
                 case OPTIONS:
                     OptionMenu();
@@ -281,10 +296,9 @@ public class Framework extends Canvas {
                 }
             break;
             case GAMEOVER:
+            	g2d.drawImage(bg_game, 0, 0,frameWidth,frameHeight,null);
                 game.Draw(g2d, mousePosition());
-                g2d.setFont(new Font("Arial", Font.BOLD, 50));
-            	g2d.drawString("YOU LOSE", game.xPlayer() -100 , game.yPlayer() -50);
-            	g2d.drawString("Bam ESC quay lai menu", game.xPlayer() -180, game.yPlayer() + 100);
+                g2d.drawImage(gameOver, game.xPlayer()-(gameOver.getWidth())/2 , game.yPlayer()-(gameOver.getHeight())/2,null);
             break;
             case DESTROYED:
             	game.Draw(g2d, mousePosition());
@@ -295,22 +309,23 @@ public class Framework extends Canvas {
             case PAUSE:
                 game.Draw(g2d, mousePosition());
                 g2d.drawImage(pause,game.xPlayer()-(pause.getWidth())/2 , game.yPlayer()-(pause.getHeight())/2,null);
-                g2d.drawRect(game.xPlayer()-(pause.getWidth())/2+220, game.yPlayer()-(pause.getHeight())/2+40, 180, 48);
-                g2d.drawRect(game.xPlayer()-(pause.getWidth())/2+220,  game.yPlayer()-(pause.getHeight())/2+130, 180, 48);	
-                g2d.drawRect(game.xPlayer()-(pause.getWidth())/2+220,  game.yPlayer()-(pause.getHeight())/2+225, 180, 48);	
-                g2d.drawRect(game.xPlayer()-(pause.getWidth())/2+220,  game.yPlayer()-(pause.getHeight())/2+315, 180, 48);	
+                g2d.drawRect(game.xPlayer()-(pause.getWidth())/2+386, game.yPlayer()-(pause.getHeight())/2+319, 251, 65);
+                g2d.drawRect(game.xPlayer()-(pause.getWidth())/2+386,  game.yPlayer()-(pause.getHeight())/2+438, 251, 65);	
+
             break;
             case GAME_CONTENT_LOADING:
+                g2d.drawImage(loading, 0, 0,frameWidth,frameHeight,null);
             break;
             case MAIN_MENU:
                 g2d.drawImage(bg_menu, 0, 0,frameWidth,frameHeight,null);
                 g2d.drawImage(btn_start, frameWidth/8, frameHeight/3 + 260, 170, 50, null);
-                g2d.drawImage(btn_loadgame, frameWidth/8, frameHeight/3 + 355,170, 50, null);
+                g2d.drawImage(btn_instruction, frameWidth/8, frameHeight/3 + 355,170, 50, null);
                 g2d.drawImage(btn_options, frameWidth*3/4, frameHeight/3 + 260,170, 50, null);
                 g2d.drawImage(btn_exit, frameWidth*3/4, frameHeight/3 + 355,170, 50, null);               
             break;
             case OPTIONS:
             	g2d.drawImage(bg_menu, 0, 0,frameWidth,frameHeight,null);
+            	g2d.drawImage(optionMenu, 0, 0,frameWidth,frameHeight,null);            	
             	g2d.drawImage(character0, frameWidth / 12, 400, targetWidth, targetHeight, null);
             	g2d.drawImage(character1, frameWidth / 12 + targetWidth + 20, 400, targetWidth, targetHeight, null);
             	g2d.drawImage(character2, frameWidth / 12 + (targetWidth + 20) * 2, 400, targetWidth, targetHeight, null);
@@ -321,6 +336,11 @@ public class Framework extends Canvas {
                 g2d.drawImage(bg_introduce, 0, 0, null);
             break;
             
+            case INSTRUCTION:
+            	g2d.drawImage(bg_menu, 0, 0,frameWidth,frameHeight,null);
+            	g2d.drawImage(instructImg, 0, 0,frameWidth,frameHeight,null);           	
+            	
+                g2d.drawImage(btn_exit, frameWidth*1/2-80, frameHeight/3 + 355,170, 50, null);      
         }
     }
     
@@ -339,15 +359,17 @@ public class Framework extends Canvas {
     /*
     * Load Game State from save.txt
     */
-    private void loadGame(){
-        /* read file save.txt
+    private void instruction(){
+        /* Hướng dẫn chơi
         */
-        gameTime = 0;
-        lastTime = System.nanoTime();
-        
-        game = new Game(f);
+    	if(Canvas.mouseButtonState(MouseEvent.BUTTON1)){
+	        if(new Rectangle(frameWidth * 1/2 - 80, 400, character3.getWidth(), character3.getHeight()).contains(mousePosition())) {
+	            gameState = GameState.MAIN_MENU;
+	        }
+    	}
     }
-    
+    //btn_exit, frameWidth*1/2-80, frameHeight/3 + 355,170, 50, null
+
     
     /**
      *  Restart game - reset game time and call RestartGame() method of game object so that reset some variables.
@@ -370,8 +392,8 @@ public class Framework extends Canvas {
             if(new Rectangle(frameWidth/8, frameHeight/3 + 260,btn_start.getWidth(),btn_start.getHeight()).contains(mousePosition()))
                 newGame();
         
-            if(new Rectangle(frameWidth/8, frameHeight/3 + 355,btn_loadgame.getWidth(),btn_loadgame.getHeight()).contains(mousePosition()))
-                gameState = GameState.LOADGAME;
+            if(new Rectangle(frameWidth/8, frameHeight/3 + 355,btn_instruction.getWidth(),btn_instruction.getHeight()).contains(mousePosition()))
+                gameState = GameState.INSTRUCTION;
             
             if(new Rectangle(frameWidth*3/4, frameHeight/3 + 260,btn_options.getWidth(),btn_options.getHeight()).contains(mousePosition()))
                 gameState = GameState.OPTIONS;
@@ -439,18 +461,12 @@ public class Framework extends Canvas {
     
     private void pause() {
         if (Canvas.mouseButtonState(MouseEvent.BUTTON1)) {
-            if (new Rectangle(game.xPlayer()-(pause.getWidth())/2+220, game.yPlayer()-(pause.getHeight())/2+40, 180, 48).contains(mousePositionFollowPlayer())) {
+            if (new Rectangle(game.xPlayer()-(pause.getWidth())/2+386, game.yPlayer()-(pause.getHeight())/2+319, 251, 65).contains(mousePositionFollowPlayer())) {
                 System.out.println("("+mousePositionFollowPlayer().x+", "+mousePositionFollowPlayer().y+")");
                 gameState = GameState.PLAYING;    
             }
 
-            if (new Rectangle(game.xPlayer()-(pause.getWidth())/2+220,  game.yPlayer()-(pause.getHeight())/2+130, 180, 48).contains(mousePositionFollowPlayer())) {
-                savegame();
-            }
-            if (new Rectangle(game.xPlayer()-(pause.getWidth())/2+220,  game.yPlayer()-(pause.getHeight())/2+225, 180, 48).contains(mousePositionFollowPlayer())) {
-                gameState = GameState.OPTIONS;
-            }
-            if (new Rectangle(game.xPlayer()-(pause.getWidth())/2+220, game.yPlayer()-(pause.getHeight())/2+320, 180, 48).contains(mousePositionFollowPlayer())) {
+            if (new Rectangle(game.xPlayer()-(pause.getWidth())/2+386,  game.yPlayer()-(pause.getHeight())/2+438, 251, 65).contains(mousePositionFollowPlayer())) {
 //                Game.INGAME.stop();
                 gameState = GameState.MAIN_MENU;
                 try {
@@ -462,10 +478,7 @@ public class Framework extends Canvas {
         }
         preState = GameState.PAUSE;
     }
-    
-    public void savegame(){
-        
-    }
+
     
     /**
      * This method is called when keyboard key is released.

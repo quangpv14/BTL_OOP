@@ -8,6 +8,7 @@ package rpg;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -116,10 +117,10 @@ class Monster extends Entity {
         		this.x -= 15*speed_base;
         	}
         	if(direction == Entity.Direction.UP) {
-        		this.y -= 15*speed_base;
+        		this.y += 15*speed_base;
         	}
         	if(direction == Entity.Direction.DOWN) {
-        		this.y += 15*speed_base;
+        		this.y -= 15*speed_base;
         	}
         	
         	countAtRest = 10;
@@ -220,7 +221,8 @@ class Monster extends Entity {
             randomDirec();
         }
     }
-
+    
+    
     public void randomDirec() {
         random_direction = random.nextInt(4);
         switch (random_direction) {
@@ -236,6 +238,63 @@ class Monster extends Entity {
         case 3:
         	this.direction = Entity.Direction.DOWN;
         	break;
+        }
+    }
+
+    public void randomDirec(Direction exception) {
+        random_direction = random.nextInt(3);
+        switch (exception) {
+        case UP: 
+            switch (random_direction) {
+            case 0:
+            	this.direction = Entity.Direction.LEFT;
+            	break;
+            case 1:
+            	this.direction = Entity.Direction.RIGHT;
+            	break;
+            case 2:
+            	this.direction = Entity.Direction.DOWN;
+            	break;
+            }
+            
+        case DOWN: 
+            switch (random_direction) {
+            case 0:
+            	this.direction = Entity.Direction.LEFT;
+            	break;
+            case 1:
+            	this.direction = Entity.Direction.RIGHT;
+            	break;
+            case 2:
+            	this.direction = Entity.Direction.UP;
+            	break;
+            }
+            
+        case LEFT: 
+            switch (random_direction) {
+            case 0:
+            	this.direction = Entity.Direction.RIGHT;
+            	break;
+            case 1:
+            	this.direction = Entity.Direction.UP;
+            	break;
+            case 2:
+            	this.direction = Entity.Direction.DOWN;
+            	break;
+            }
+            
+        case RIGHT: 
+            switch (random_direction) {
+            case 0:
+            	this.direction = Entity.Direction.LEFT;
+            	break;
+            case 1:
+            	this.direction = Entity.Direction.UP;
+            	break;
+            case 2:
+            	this.direction = Entity.Direction.DOWN;
+            	break;
+            }
         }
     }
 

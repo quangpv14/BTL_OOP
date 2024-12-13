@@ -3,23 +3,23 @@ package rpg;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.awt.Rectangle;
 
 
-public class Game {
+public class Game  {
 
-    private Map map;
+	Map map;
 
     private Player player;
 
     private long time_start_sword;
     private long time_start_fireball;
     private long time_start_transform;
-    private final int COOLDOWN_ATTACK = 60;
+    private final int COOLDOWN_ATTACK = 30;
     private int cooldown;
     private int fireball_cooldown;
     private boolean isEnd = false;
+    
 
     public Game() {
         Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
@@ -29,23 +29,6 @@ public class Game {
             public void run() {
                 // Sets variables and objects for the game.
                 Initialize();
-                // Load game files (images, sounds, ...)
-                LoadContent();
-
-                Framework.gameState = Framework.GameState.PLAYING;
-            }
-        };
-        threadForInitGame.start();
-    }
-
-    public Game(File f) {
-        Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
-
-        Thread threadForInitGame = new Thread() {
-            @Override
-            public void run() {
-                //Load previous game state.
-                loadGame(f);
                 // Load game files (images, sounds, ...)
                 LoadContent();
 
@@ -72,10 +55,7 @@ public class Game {
 
     }
 
-    private void loadGame(File f) {
-
-    }
-
+    
     /**
      * Restart game - reset some variables.
      */
@@ -229,12 +209,12 @@ public class Game {
                 map.getCurrentMap().arrayMonster.remove(temp);
             }
             {
-                Rectangle shapeMonter = new Rectangle((int) temp.getX(), (int) temp.getY(), temp.getWidth(), temp.getHeight());
+                Rectangle shapeMonter = new Rectangle((int) temp.getX(), (int) temp.getY(), temp.getWidth() * 2, temp.getHeight() * 2);
                 if (shapeMonter.contains(new Point((int) player.getX(), (int) player.getY()))
-                        || shapeMonter.contains(new Point((int) player.getX() + player.getWidth() - 20, (int) player.getY()))
-                        || shapeMonter.contains(new Point((int) player.getX(), (int) player.getY() + player.getHeight() - 20))
-                        || shapeMonter.contains(new Point((int) player.getX() + player.getWidth() - 20, (int) player.getY() + player.getHeight() - 20))) {
-
+                        || shapeMonter.contains(new Point((int) player.getX() + player.getWidth(), (int) player.getY()))
+                        || shapeMonter.contains(new Point((int) player.getX(), (int) player.getY() + player.getHeight()))
+                        || shapeMonter.contains(new Point((int) player.getX() + player.getWidth(), (int) player.getY() + player.getHeight()))) {
+                	
                     double nx = player.getX();
                     double ny = player.getY();
                     if (player.immortal() == false) {
@@ -263,6 +243,7 @@ public class Game {
 
                     }
                 }
+                
 
                 if (Math.sqrt(Math.pow(temp.getX() - player.getX(), 2) + Math.pow(temp.getY() - player.getY(), 2)) < temp.AREA_DETEC) {
                     double dx = temp.getX();
@@ -285,7 +266,14 @@ public class Game {
                     if (map.getCurrentMap().valid_location(dx, dy) != 0) {
                         temp.move(dx, dy);
                     }
-                } else {
+                    else {
+                        temp.randomDirec(temp.getDirection());
+                        temp.move(dx, dy);
+                    }
+                } 
+                
+                
+                else { 
                     map.getCurrentMap().monster_move_onMap(temp);
                 }
             }
@@ -369,11 +357,11 @@ public class Game {
             monster_width = map.getCurrentMap().arrayMonster.get(i).getWidth();
             monster_height = map.getCurrentMap().arrayMonster.get(i).getHeight();
             if (player.get_att() == true
-                    && (new Rectangle((int) monster_x, (int) monster_y, (int) monster_width, (int) monster_height).contains(player.get_att_point1())
-                    || new Rectangle((int) monster_x, (int) monster_y, (int) monster_width, (int) monster_height).contains(player.get_att_point2())
-                    || new Rectangle((int) monster_x, (int) monster_y, (int) monster_width, (int) monster_height).contains(player.get_att_point3()))) {
+                    && (new Rectangle((int) monster_x, (int) monster_y, (int) monster_width * 3/2, (int) monster_height * 5).contains(player.get_att_point1())
+                    || new Rectangle((int) monster_x, (int) monster_y, (int) monster_width * 3/2, (int) monster_height * 5).contains(player.get_att_point2())
+                    || new Rectangle((int) monster_x, (int) monster_y, (int) monster_width * 3/2, (int) monster_height * 5).contains(player.get_att_point3()))) {
                 map.getCurrentMap().arrayMonster.get(i).decreaseHP(player.getATK()); // chua co max att nen dung tam att base
-
+                
                 if (player.getX() < map.getCurrentMap().arrayMonster.get(i).getX()) {
                     map.getCurrentMap().arrayMonster.get(i).setDirection(Entity.Direction.LEFT);
                 } else if (player.getX() > map.getCurrentMap().arrayMonster.get(i).getX()) {

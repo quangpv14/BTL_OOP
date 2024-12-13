@@ -304,6 +304,8 @@ class Player extends Entity {
     }
 
     public void setSwordAni() {
+
+    	
         if (att == true) { // Check if the player is attacking
             countSword++;
             
@@ -488,10 +490,10 @@ class Player extends Entity {
         else
             character = (BufferedImage) Character[1][index_img];
             current_sword_att = sword[0][index_att];
-            att_x = x - 25;
+            att_x = x - 35;
             att_y = y - 27;
             range_Att1.setLocation(att_x, att_y);
-            range_Att3.setLocation(att_x, att_y + current_sword_att.getHeight());
+            range_Att3.setLocation(att_x, att_y + current_sword_att.getHeight() * 5);
             range_Att2.setLocation((range_Att1.getX() + range_Att3.getX()) / 2, (range_Att1.getY() + range_Att3.getY()) / 2);
         }
         if (direction == Direction.RIGHT) {
@@ -499,10 +501,10 @@ class Player extends Entity {
         	else
             character = (BufferedImage) Character[2][index_img];
             current_sword_att = sword[1][index_att];
-            att_x = x + 30;
-            att_y = y - 29;
+            att_x = x + 35;
+            att_y = y - 35;
             range_Att1.setLocation(att_x, att_y);
-            range_Att3.setLocation(att_x + current_sword_att.getWidth(), att_y + current_sword_att.getHeight());
+            range_Att3.setLocation(att_x + current_sword_att.getWidth() * 3, att_y + current_sword_att.getHeight() * 5);
             range_Att2.setLocation((range_Att1.getX() + range_Att3.getX()) / 2, (range_Att1.getY() + range_Att3.getY()) / 2);
         }
         if (direction == Direction.UP) {
@@ -510,10 +512,10 @@ class Player extends Entity {
         	else
             character = (BufferedImage) Character[3][index_img];
             current_sword_att = sword[2][index_att];
-            att_x = x - 10;
+            att_x = x - 30;
             att_y = y - 50;
             range_Att1.setLocation(att_x, att_y);
-            range_Att3.setLocation(att_x + current_sword_att.getWidth(), att_y);
+            range_Att3.setLocation(att_x + current_sword_att.getWidth() * 3 + 30, att_y);
             range_Att2.setLocation((range_Att1.getX() + range_Att3.getX()) / 2, (range_Att1.getY() + range_Att3.getY()) / 2);
         }
         if (direction == Direction.DOWN) {
@@ -524,8 +526,8 @@ class Player extends Entity {
 
             att_x = x - 8;
             att_y = y + 20;
-            range_Att1.setLocation(att_x, att_y);
-            range_Att3.setLocation(att_x + current_sword_att.getWidth(), att_y + current_sword_att.getHeight());
+            range_Att1.setLocation(att_x - 50, att_y);
+            range_Att3.setLocation(att_x + current_sword_att.getWidth() * 3, att_y + current_sword_att.getHeight() * 3 + 30);
             range_Att2.setLocation((range_Att1.getX() + range_Att3.getX()) / 2, (range_Att1.getY() + range_Att3.getY()) / 2);
         }
 
@@ -539,7 +541,7 @@ class Player extends Entity {
             drawHPbar(g2d);
         }
         if (att) {
-            g2d.drawImage(current_sword_att, (int) att_x, (int) att_y, current_sword_att.getWidth(), current_sword_att.getHeight(), null);
+            g2d.drawImage(current_sword_att, (int) att_x, (int) att_y, current_sword_att.getWidth() * 2, current_sword_att.getHeight() * 2, null);
         }
         if (fireball_att) {
             g2d.drawImage(current_fireball, (int) att_fireball_x, (int) att_fireball_y, 100, 100, null);
