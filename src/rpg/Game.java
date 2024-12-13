@@ -3,6 +3,9 @@ package rpg;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+
+import rpg.Framework.GameState;
+
 import java.awt.Rectangle;
 
 
@@ -19,7 +22,8 @@ public class Game  {
     private int cooldown;
     private int fireball_cooldown;
     private boolean isEnd = false;
-    
+
+    Sound sound = new Sound();
 
     public Game() {
         Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
@@ -283,9 +287,11 @@ public class Game  {
     public void playerAction(long gameTime) {
         if (player.die()) {
             Framework.gameState = Framework.GameState.GAMEOVER;
+            playSE(3);
         }
         if (isEnd) {
         	Framework.gameState = Framework.GameState.DESTROYED;
+            playSE(4);
         }
         if (cooldown == 0) {
             if (Canvas.keyboardKeyState(KeyEvent.VK_SPACE)) {
@@ -334,11 +340,13 @@ public class Game  {
 
     public void player_att(long gameTime) {
         player.set_att(true);
+        playSE(1);
         time_start_sword = gameTime;
     }
 
     public void player_fireball(long gameTime) {
         player.set_fireball_att(true);
+        playSE(2);
         time_start_fireball = gameTime;
 
     }
@@ -401,6 +409,25 @@ public class Game  {
         g2d.translate(-player.x + 512, -player.y + 384);
         map.paint(g2d);
         player.paint(g2d);
+    }
+
+    public void playMusic(int i)
+    {
+        sound.setFile(i);
+        if (sound != null && sound.clip != null) {
+            sound.play();
+        } else {
+            System.err.println("Sound or Clip is not initialized. Please check initialization.");
+        }
+    }
+    public void stopMusic()
+    {
+        sound.stop();
+    }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
     }
 
 }
