@@ -82,7 +82,9 @@ public class Framework extends Canvas {
     private BufferedImage gameOver;
     private BufferedImage optionMenu;
     private BufferedImage loading;
-    
+
+    Sound sound = new Sound();
+
     // The actual game
     private Game game;
     
@@ -109,7 +111,7 @@ public class Framework extends Canvas {
      */
     private void Initialize()
     {
-        
+        playMusic(0);
     }
     
     
@@ -274,6 +276,7 @@ public class Framework extends Canvas {
             try {
                  Thread.sleep(timeLeft);
             } catch (InterruptedException ex) { }
+
         }
     }
     
@@ -533,4 +536,25 @@ public class Framework extends Canvas {
     {
         
     }
+
+    public void playMusic(int i)
+    {
+        sound.setFile(i);
+        if (sound != null && sound.clip != null) {
+            sound.play();
+            sound.loop();
+        } else {
+            System.err.println("Sound or Clip is not initialized. Please check initialization.");
+        }
+
+    }
+    public void stopMusic()
+    {
+        sound.stop();
+    }
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+
 }

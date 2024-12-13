@@ -28,8 +28,11 @@ class Map {
     public final static int TILE_WIDTH = 24;
     public final static int TILE_HEIGHT = 18;
     
-    public final static int NUMBER_OF_SUBMAP = 3;
+    public final static int NUMBER_OF_SUBMAP = 4;
     public int id_current;
+
+    private Lighting lighting;
+    Framework fw;
     
     public Map(){
         submaps = new ArrayList<>();
@@ -41,6 +44,10 @@ class Map {
         }
         id_current = 1;
         currentMap = submaps.get(id_current);
+
+        if(id_current == 3) {
+        	lighting = new Lighting(fw, 1900);
+        }
     }
     
     public submap getCurrentMap()
@@ -53,6 +60,12 @@ class Map {
             id_current++;
             currentMap = submaps.get(id_current);
             System.out.println("next "+id_current);
+
+            if (id_current == 3) {
+            	lighting = new Lighting(fw, 1900);
+            } else {
+            	lighting = null;
+            }
         }else{
             System.out.println("Da qua het tat ca ca cac map!");
         }
@@ -63,6 +76,12 @@ class Map {
             id_current--;
             currentMap = submaps.get(id_current);
             System.out.println("back "+id_current);
+
+            if (id_current == 3) {
+            	lighting = new Lighting(fw, 1900);
+            } else {
+            	lighting = null;
+            }
         }
         else{
             System.out.println("Dang la map 1");
@@ -94,6 +113,10 @@ class Map {
     public void paint(Graphics2D g2d){
         g2d.drawImage(border, 0, 0,null);
         currentMap.paint(g2d);
+
+        if(id_current == 3 && lighting != null) {
+        	lighting.draw(g2d);
+        }
     }
    
 }
